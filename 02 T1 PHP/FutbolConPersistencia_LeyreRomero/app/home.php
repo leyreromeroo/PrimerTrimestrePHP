@@ -1,27 +1,3 @@
-<?php
-
-/**
- * @title: Proyecto integrador Ev01 - Página principal
- * @description: Redirecciona al usuario a la página de inicio determinada por la sesión.
- *
- * @version    0.2
- * @author ander_frago@cuatrovientos.org
- */
-
-// NOTA: 'header.php' debe iniciar la sesión, si no, hay que hacerlo aquí.
-// Lo moveremos a 'header.php' para evitar la advertencia de 'session_start()' después del 'require_once'.
-// require_once 'templates/header.php'; 
-
-
-require_once 'templates/header.php';
-
-?>
-<!-- Bootstrap core CSS
-* TODO REVISE Este es el aspecto negativo de esta estructura ya que el código esta duplicado
-Y además no está en ASSETS
-================================================== -->
-
-
 <body>
   <header class="hero-section">
     <div class="container">
@@ -48,7 +24,3 @@ Y además no está en ASSETS
   </div>
 </footer>
 <script src=".\assets\js\bootstrap.js"></script>
-
-
-
-</html>

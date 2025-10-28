@@ -46,6 +46,9 @@ else if (SessionHelper::loggedin()) {
     // TODO En caso de que exista variable de sesión redireccionamos a la página principal
     header("Location: " . $indexPath);
     exit;
+}else {
+    header("Location: " . $equiposPath);
+    exit;
 }
 ?>
 
