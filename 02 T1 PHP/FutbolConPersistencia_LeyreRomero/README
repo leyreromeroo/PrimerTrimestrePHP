@@ -1,0 +1,18 @@
+# ArteaV1 - Proyecto (DAO, PHP, MySQL)
+
+## Requisitos
+- PHP 7.4+ con PDO MySQL
+- MySQL / MariaDB
+- Composer (opcional)
+- HeidiSQL para importar SQL
+
+## Instalación
+1. Importar `sql/laliga.sql` en tu servidor MySQL (HeidiSQL).
+2. Copiar `src/config.php` y configurar credenciales DB.
+3. Servir la carpeta `public/` (ej. con built-in php server):
+   php -S localhost:8000 -t public
+4. Accede a http://localhost:8000
+
+## Notas
+- Patrón DAO usado en src/dao.
+- Sesión: si visitas un equipo, la página principal se redirige a sus partidos (session -> last_viewed_team).
