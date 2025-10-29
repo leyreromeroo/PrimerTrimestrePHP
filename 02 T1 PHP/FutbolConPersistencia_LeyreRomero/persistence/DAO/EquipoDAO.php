@@ -1,50 +1,63 @@
 <?php
-require_once 'GenericDAO.php';
-require_once __DIR__ . '/../model/Equipo.php';
+require 'GenericDAO.php';
+require '../models/Equipo.php';
 
-class EquipoDAO {
-    private $id_equipo;
-    private $nombre;
-    private $estadio;
-    private $conn;
+class EquipoDAO extends GenericDAO {
+    const TABLE = 'equipos';
 
-
-    public function __construct($id_equipo, $nombre, $estadio) {
-        $this->conn = PersistentManager::getInstance()->get_connection();
-        $this->id_equipo = $id_equipo;
-        $this->nombre = $nombre;
-        $this->estadio = $estadio;
+    public function __construct() {
+        parent::__construct();
     }
 
-
-    public function getAllEquipos() {
-        $query = "SELECT * FROM equipos";
+    // ✅ Obtener todos los equipos
+    public function selectAll() {
+        $query = "SELECT * FROM " . self::TABLE;
         $result = mysqli_query($this->conn, $query);
         $equipos = [];
 
         while ($row = mysqli_fetch_assoc($result)) {
-            $equipos[] = new EquipoDAO($row['id_equipo'], $row['nombre'], $row['estadio']);
+            $equipos[] = new Equipo(
+                $row['id_equipo'],
+                $row['nombre'],
+                $row['estadio']
+            );
         }
-
         return $equipos;
     }
 
-    public function getEquipoById($id) {
-        $query = "SELECT * FROM equipos WHERE id_equipo = ?";
+    // ✅ Buscar equipo por ID
+    public function selectById($id) {
+        $query = "SELECT * FROM " . self::TABLE . " WHERE id_equipo = ?";
         $stmt = mysqli_prepare($this->conn, $query);
         mysqli_stmt_bind_param($stmt, "i", $id);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         $row = mysqli_fetch_assoc($result);
 
-        return $row ? new EquipoDAO($row['id_equipo'], $row['nombre'], $row['estadio']) : null;
+        return $row ? new Equipo($row['id_equipo'], $row['nombre'], $row['estadio']) : null;
     }
 
-    public function insertEquipo($nombre, $estadio) {
-        $query = "INSERT INTO equipos (nombre, estadio) VALUES (?, ?)";
+    // ✅ Insertar equipo nuevo
+    public function insert($nombre, $estadio) {
+        $query = "INSERT INTO " . self::TABLE . " (nombre, estadio) VALUES (?, ?)";
         $stmt = mysqli_prepare($this->conn, $query);
         mysqli_stmt_bind_param($stmt, "ss", $nombre, $estadio);
         return mysqli_stmt_execute($stmt);
     }
+
+    // ✅ Actualizar equipo
+    public function update($id, $nombre, $estadio) {
+        $query = "UPDATE " . self::TABLE . " SET nombre = ?, estadio = ? WHERE id_equipo = ?";
+        $stmt = mysqli_prepare($this->conn, $query);
+        mysqli_stmt_bind_param($stmt, "ssi", $nombre, $estadio, $id);
+        return mysqli_stmt_execute($stmt);
+    }
+
+    // ✅ Eliminar equipo
+    public function delete($id) {
+        $query = "DELETE FROM " . self::TABLE . " WHERE id_equipo = ?";
+        $stmt = mysqli_prepare($this->conn, $query);
+        mysqli_stmt_bind_param($stmt, "i", $id);
+        return mysqli_stmt_execute($stmt);
+    }
 }
-?>

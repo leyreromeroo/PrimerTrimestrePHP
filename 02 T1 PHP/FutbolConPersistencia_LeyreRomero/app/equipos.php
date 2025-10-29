@@ -1,15 +1,11 @@
 <?php
-// activa errores durante la depuración (quítalo en producción)
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+require_once '../templates/header.php';
 
-// ruta base del proyecto (ajústala si tu proyecto está en otra carpeta)
-$base = $_SERVER['DOCUMENT_ROOT'] . '/Trabajos DW/PrimerTrimestrePHP/02 T1 PHP/FutbolConPersistencia_LeyreRomero';
+// incluye DAO y modelo
+require_once '../persistence/DAO/EquipoDAO.php';
+require_once '../models/Equipo.php';
 
-// incluye el DAO mediante ruta absoluta
-require_once $base . '/persistence/DAO/EquipoDAO.php';
-
-// instancia DAO
+// instancia del DAO
 $dao = new EquipoDAO();
 
 // insertar equipo si llega POST
@@ -20,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($nombre === '' || $estadio === '') {
         $error = "Todos los campos son obligatorios.";
     } else {
-        $ok = $dao->insertEquipo($nombre, $estadio);
+        $ok = $dao->insert($nombre, $estadio);
         if ($ok === false) {
             $error = "No se pudo insertar el equipo (error en BD).";
         } else {
@@ -30,8 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// obtener equipos (devuelve array de objetos Equipo)
-$equipos = $dao->getAllEquipos();
+// obtener todos los equipos (devuelve array de objetos Equipo)
+$equipos = $dao->selectAll();
 ?>
 
 <!DOCTYPE html>
@@ -49,6 +45,7 @@ $equipos = $dao->getAllEquipos();
       <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
 
+    <!-- Formulario de alta -->
     <div class="card shadow-sm mb-5">
       <div class="card-body">
         <h4 class="mb-3">Añadir nuevo equipo</h4>
@@ -66,6 +63,7 @@ $equipos = $dao->getAllEquipos();
       </div>
     </div>
 
+    <!-- Tabla de equipos -->
     <table class="table table-striped table-bordered shadow-sm">
       <thead class="table-success text-center">
         <tr>
@@ -76,16 +74,20 @@ $equipos = $dao->getAllEquipos();
         </tr>
       </thead>
       <tbody>
-        <?php foreach ($equipos as $e): ?>
-          <tr>
-            <td><?= htmlspecialchars($e->getIdEquipo()) ?></td>
-            <td><?= htmlspecialchars($e->getNombre()) ?></td>
-            <td><?= htmlspecialchars($e->getEstadio()) ?></td>
-            <td class="text-center">
-              <a href="partidos_equipo.php?id=<?= htmlspecialchars($e->getIdEquipo()) ?>" class="btn btn-outline-primary btn-sm">Ver</a>
-            </td>
-          </tr>
-        <?php endforeach; ?>
+        <?php if (!empty($equipos)): ?>
+          <?php foreach ($equipos as $e): ?>
+            <tr>
+              <td><?= htmlspecialchars($e->getIdEquipo()) ?></td>
+              <td><?= htmlspecialchars($e->getNombre()) ?></td>
+              <td><?= htmlspecialchars($e->getEstadio()) ?></td>
+              <td class="text-center">
+                <a href="partidos_equipo.php?id=<?= htmlspecialchars($e->getIdEquipo()) ?>" class="btn btn-outline-primary btn-sm">Ver</a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <tr><td colspan="4" class="text-center text-muted">No hay equipos registrados</td></tr>
+        <?php endif; ?>
       </tbody>
     </table>
 

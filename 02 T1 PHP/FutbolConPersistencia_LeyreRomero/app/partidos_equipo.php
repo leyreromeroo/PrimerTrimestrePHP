@@ -1,4 +1,5 @@
 <?php
+require_once 'templates/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/Trabajos DW/PrimerTrimestrePHP/02 T1 PHP/FutbolConPersistencia_LeyreRomero/persistence/DAO/EquipoDAO.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/Trabajos DW/PrimerTrimestrePHP/02 T1 PHP/FutbolConPersistencia_LeyreRomero/persistence/DAO/PartidoDAO.php';
 
