@@ -1,54 +1,16 @@
 <?php
-
-/**
- * @title: Proyecto integrador Ev01 - Página principal
- * @description: Redirecciona al usuario a la página de inicio determinada por la sesión.
- *
- * @version    0.2
- * @author ander_frago@cuatrovientos.org
- */
-
-// NOTA: 'header.php' debe iniciar la sesión, si no, hay que hacerlo aquí.
-// Lo moveremos a 'header.php' para evitar la advertencia de 'session_start()' después del 'require_once'.
-// require_once 'templates/header.php'; 
-
-
 require_once 'templates/header.php';
-
 ?>
-<!-- Bootstrap core CSS
-* TODO REVISE Este es el aspecto negativo de esta estructura ya que el código esta duplicado
-Y además no está en ASSETS
-================================================== -->
 
 
-<body>
-  <header class="hero-section">
-    <div class="container">
-      <h1 class="display-3 fw-bold">Bienvenido al Gestor Deportivo</h1>
-
-      <?php if ($pagina_principal === $url_partidos): ?>
-        <p class="lead">Tu última actividad fue en **Partidos**. Haz clic a continuación para continuar o usa el menú.</p>
-        <a class="btn btn-primary btn-lg mt-3" href="<?= $url_partidos; ?>" role="button">Ir a Partidos</a>
-      <?php else: ?>
-        <p class="lead">Tu página principal actual es **Equipos**. Usa el menú superior para navegar.</p>
-        <a class="btn btn-primary btn-lg mt-3" href="<?= $url_equipos; ?>" role="button">Ir a Equipos</a>
-      <?php endif; ?>
-
-    </div>
-  </header>
-
-  <!-- Bootstrap core JavaScript
-* TODO REVISE Este es el aspecto negativo de esta estructura ya que el código esta duplicado
-================================================== -->
-</body>
-<footer class="footer">
-  <div class="container">
-    <span class="text-muted">Gestión Deportiva - 2º DAM.</span>
+<div class="container align-items-center d-flex flex-column justify-content-center" style="height: 70vh;">
+  <h1 class="text-primary mb-4">⚽ Bienvenido a LaLiga</h1>
+  <p class="lead">Consulta los resultados de tu equipo o partidos.</p>
+  <div class="d-flex justify-content-center gap-4 mt-4">
+    <a href="app/equipos.php" class="btn btn-lg btn-success px-5">Equipos</a>
+    <a href="app/partidos.php" class="btn btn-lg btn-primary px-5">Partidos</a>
   </div>
-</footer>
-<script src=".\assets\js\bootstrap.js"></script>
-
-
+</div>
+</body>
 
 </html>

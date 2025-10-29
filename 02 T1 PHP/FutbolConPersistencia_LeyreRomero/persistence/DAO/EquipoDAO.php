@@ -3,12 +3,19 @@ require_once 'GenericDAO.php';
 require_once __DIR__ . '/../model/Equipo.php';
 
 class EquipoDAO {
-
+    private $id_equipo;
+    private $nombre;
+    private $estadio;
     private $conn;
 
-    public function __construct() {
+
+    public function __construct($id_equipo, $nombre, $estadio) {
         $this->conn = PersistentManager::getInstance()->get_connection();
+        $this->id_equipo = $id_equipo;
+        $this->nombre = $nombre;
+        $this->estadio = $estadio;
     }
+
 
     public function getAllEquipos() {
         $query = "SELECT * FROM equipos";
@@ -16,7 +23,7 @@ class EquipoDAO {
         $equipos = [];
 
         while ($row = mysqli_fetch_assoc($result)) {
-            $equipos[] = new Equipo($row['id_equipo'], $row['nombre'], $row['estadio']);
+            $equipos[] = new EquipoDAO($row['id_equipo'], $row['nombre'], $row['estadio']);
         }
 
         return $equipos;
@@ -30,7 +37,7 @@ class EquipoDAO {
         $result = mysqli_stmt_get_result($stmt);
         $row = mysqli_fetch_assoc($result);
 
-        return $row ? new Equipo($row['id_equipo'], $row['nombre'], $row['estadio']) : null;
+        return $row ? new EquipoDAO($row['id_equipo'], $row['nombre'], $row['estadio']) : null;
     }
 
     public function insertEquipo($nombre, $estadio) {
