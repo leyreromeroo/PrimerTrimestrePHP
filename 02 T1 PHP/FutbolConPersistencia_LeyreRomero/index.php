@@ -1,5 +1,17 @@
 <?php
 require_once 'templates/header.php';
+
+// Si el usuario consultó un equipo → redirigir a sus partidos
+if (isset($_SESSION['ultimo_equipo_id']) && !empty($_SESSION['ultimo_equipo_id'])) {
+    $id = $_SESSION['ultimo_equipo_id'];
+    header("Location: app/partidos_equipo.php?id=" . intval($id));
+    exit;
+}
+
+// Si no hay sesión → ir a equipos
+header("Location: app/equipos.php");
+exit;
+?>
 ?>
 
 
