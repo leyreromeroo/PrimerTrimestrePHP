@@ -85,21 +85,51 @@ class PartidoDAO extends GenericDAO {
         return $partidos;
     }
 
-    // Obtener partidos por equipo (MODIFICADO para usar el JOIN)
-    public function selectByEquipo($idEquipo) {
-        $query = $this->getBaseQuery() . " 
-                  WHERE p.id_local = ? OR p.id_visitante = ?";
-        $stmt = mysqli_prepare($this->conn, $query);
-        mysqli_stmt_bind_param($stmt, "ii", $idEquipo, $idEquipo);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
+// Dentro de PartidoDAO.php
 
-        $partidos = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $partidos[] = $this->createPartidoFromRow($row);
-        }
-        return $partidos;
+public function selectByEquipo($idEquipo) {
+    // Consulta SQL con dos JOIN a la tabla 'equipos'
+    $query = "
+        SELECT 
+            p.id_partido, 
+            p.id_local, 
+            p.id_visitante, 
+            p.jornada, 
+            p.resultado, 
+            p.estadio,
+            el.nombre AS nombre_local,   
+            ev.nombre AS nombre_visitante 
+        FROM 
+            partidos p
+        JOIN 
+            equipos el ON p.id_local = el.id_equipo 
+        JOIN 
+            equipos ev ON p.id_visitante = ev.id_equipo 
+        WHERE 
+            p.id_local = ? OR p.id_visitante = ?
+        ORDER BY 
+            p.jornada ASC
+    ";
+    
+    // Preparar y ejecutar la sentencia
+    $stmt = mysqli_prepare($this->conn, $query);
+    // Asumimos que id_equipo es INT, por eso usamos "ii" para los parámetros
+    mysqli_stmt_bind_param($stmt, "ii", $idEquipo, $idEquipo);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    $partidos = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        // La función createPartidoFromRow() DEBE estar actualizada para
+        // asignar 'nombre_local' y 'nombre_visitante' al objeto.
+        $partidos[] = $this->createPartidoFromRow($row);
     }
+    
+    // Cerrar el statement
+    mysqli_stmt_close($stmt);
+    
+    return $partidos;
+}
 
     // Insertar nuevo partido
     public function insert($id_local, $id_visitante, $jornada, $resultado, $estadio) {

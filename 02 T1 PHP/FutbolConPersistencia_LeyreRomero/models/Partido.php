@@ -11,15 +11,15 @@ class Partido {
     private $nombre_visitante;
 
 
-    public function __construct($id_partido = null, $id_local = null, $id_visitante = null, $jornada = "", $resultado = "", $estadio = "") {
+    public function __construct($id_partido = null, $id_local = null, $id_visitante = null, $jornada = "", $resultado = "", $estadio = "",$nombre_local = "", $nombre_visitante = "") {
         $this->id_partido = $id_partido;
         $this->id_local = $id_local;
         $this->id_visitante = $id_visitante;
         $this->jornada = $jornada;
         $this->resultado = $resultado;
         $this->estadio = $estadio;
-        $this->nombre_local = null; 
-        $this->nombre_visitante = null; 
+        $this->nombre_local = $nombre_local; 
+        $this->nombre_visitante = $nombre_visitante; 
     }
 
     // Getters 

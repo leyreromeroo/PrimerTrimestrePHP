@@ -16,6 +16,7 @@ $equipoDAO = new EquipoDAO();
 $partidoDAO = new PartidoDAO();
 
 // Cargar datos del equipo y sus partidos
+// El método selectByEquipo() ahora DEBE devolver también el nombre del equipo local y visitante.
 $equipo = $equipoDAO->selectById($id);
 if (!$equipo) {
     die("Error: Equipo no encontrado.");
@@ -45,13 +46,16 @@ if (!is_array($partidos)) $partidos = [];
                             <div class="list-group-item list-group-item-action py-3 mb-3 border-start border-5 border-info shadow-sm rounded-lg hover-shadow transition-shadow">
                                 <div class="d-flex w-100 justify-content-between align-items-center">
                                     <h5 class="mb-1 fw-bold text-dark">Jornada <?= htmlspecialchars($p->getJornada()) ?></h5>
-                                    <span class="badge bg-primary rounded-pill fs-6"><?= htmlspecialchars($p->getResultado()) ?></span>
+                                    <span class="badge bg-primary rounded-pill fs-6">
+                                        <?= htmlspecialchars($p->getNombreEquipoLocal()) ?> vs <?= htmlspecialchars($p->getNombreEquipoVisitante()) ?> - <?= htmlspecialchars($p->getResultado()) ?>
+                                    </span>
                                 </div>
+                                
                                 <div class="row mt-2">
                                     <div class="col-md-6">
                                         <p class="mb-1 text-muted">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill me-1" viewBox="0 0 16 16">
-                                              <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                                                <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
                                             </svg>
                                             Estadio: <span class="fw-semibold text-dark"><?= htmlspecialchars($p->getEstadio()) ?></span>
                                         </p>
@@ -70,7 +74,7 @@ if (!is_array($partidos)) $partidos = [];
                 <div class="text-center mt-5">
                     <a href="equipos.php" class="btn btn-outline-secondary btn-lg shadow-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-arrow-left me-2" viewBox="0 0 16 16">
-                          <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+                            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
                         </svg>
                         Volver a la lista de equipos
                     </a>
