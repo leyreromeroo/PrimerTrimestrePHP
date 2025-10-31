@@ -2,7 +2,6 @@
 require_once '../templates/header.php';
 require_once '../persistence/DAO/EquipoDAO.php';
 require_once '../persistence/DAO/PartidoDAO.php';
-// require_once '../models/Partido.php'; //Lo tienen ya los DAOs
 
 $id = $_GET['id'] ?? null;
 if (!$id || !is_numeric($id)) {
@@ -10,19 +9,19 @@ if (!$id || !is_numeric($id)) {
     exit();
 }
 
-// GUARDAR EL EQUIPO COMO "ÚLTIMO CONSULTADO"
+// Guardar el equipo como “último consultado” (uso de sesión)
 $_SESSION['ultimo_equipo_id'] = (int)$id;
 
 $equipoDAO = new EquipoDAO();
 $partidoDAO = new PartidoDAO();
 
-// Carga de datos
+// Cargar datos del equipo y sus partidos
 $equipo = $equipoDAO->selectById($id);
 if (!$equipo) {
     die("Error: Equipo no encontrado.");
 }
 
-// Verifica que $partidos sea un array (en caso de error o resultado vacío)
+// Asegura que $partidos siempre sea un array (aunque no haya resultados)
 $partidos = $partidoDAO->selectByEquipo($id);
 if (!is_array($partidos)) $partidos = [];
 ?>
@@ -41,7 +40,6 @@ if (!is_array($partidos)) $partidos = [];
                 </div>
 
                 <?php if (count($partidos) > 0): ?>
-                    
                     <div class="list-group">
                         <?php foreach ($partidos as $p): ?>
                             <div class="list-group-item list-group-item-action py-3 mb-3 border-start border-5 border-info shadow-sm rounded-lg hover-shadow transition-shadow">
@@ -49,7 +47,6 @@ if (!is_array($partidos)) $partidos = [];
                                     <h5 class="mb-1 fw-bold text-dark">Jornada <?= htmlspecialchars($p->getJornada()) ?></h5>
                                     <span class="badge bg-primary rounded-pill fs-6"><?= htmlspecialchars($p->getResultado()) ?></span>
                                 </div>
-
                                 <div class="row mt-2">
                                     <div class="col-md-6">
                                         <p class="mb-1 text-muted">
@@ -63,9 +60,7 @@ if (!is_array($partidos)) $partidos = [];
                             </div>
                         <?php endforeach; ?>
                     </div>
-
                 <?php else: ?>
-                    <!-- MENSAJE DE NO RESULTADOS -->
                     <div class="alert alert-warning text-center" role="alert">
                         <h4 class="alert-heading">¡Vaya!</h4>
                         <p>No se encontraron partidos registrados para el equipo: <?= htmlspecialchars($equipo->getNombre()) ?></p>
@@ -86,6 +81,4 @@ if (!is_array($partidos)) $partidos = [];
     </div>
 </div> 
 
-<?php
-require_once '../templates/footer.php';
-?>
+<?php require_once '../templates/footer.php'; ?>

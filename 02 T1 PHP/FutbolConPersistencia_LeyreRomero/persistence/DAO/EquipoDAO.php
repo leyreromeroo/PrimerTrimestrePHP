@@ -9,7 +9,7 @@ class EquipoDAO extends GenericDAO {
         parent::__construct();
     }
 
-    // ✅ Obtener todos los equipos
+    // Obtener todos los equipos
     public function selectAll() {
         $query = "SELECT * FROM " . self::TABLE;
         $result = mysqli_query($this->conn, $query);
@@ -25,7 +25,7 @@ class EquipoDAO extends GenericDAO {
         return $equipos;
     }
 
-    // ✅ Buscar equipo por ID
+    // Buscar equipo por ID
     public function selectById($id) {
         $query = "SELECT * FROM " . self::TABLE . " WHERE id_equipo = ?";
         $stmt = mysqli_prepare($this->conn, $query);
@@ -37,7 +37,7 @@ class EquipoDAO extends GenericDAO {
         return $row ? new Equipo($row['id_equipo'], $row['nombre'], $row['estadio']) : null;
     }
 
-    // ✅ Insertar equipo nuevo
+    // Insertar equipo nuevo
     public function insert($nombre, $estadio) {
         $query = "INSERT INTO " . self::TABLE . " (nombre, estadio) VALUES (?, ?)";
         $stmt = mysqli_prepare($this->conn, $query);
@@ -45,7 +45,7 @@ class EquipoDAO extends GenericDAO {
         return mysqli_stmt_execute($stmt);
     }
 
-    // ✅ Actualizar equipo
+    // Actualizar equipo
     public function update($id, $nombre, $estadio) {
         $query = "UPDATE " . self::TABLE . " SET nombre = ?, estadio = ? WHERE id_equipo = ?";
         $stmt = mysqli_prepare($this->conn, $query);
@@ -53,7 +53,7 @@ class EquipoDAO extends GenericDAO {
         return mysqli_stmt_execute($stmt);
     }
 
-    // ✅ Eliminar equipo
+    // Eliminar equipo
     public function delete($id) {
         $query = "DELETE FROM " . self::TABLE . " WHERE id_equipo = ?";
         $stmt = mysqli_prepare($this->conn, $query);

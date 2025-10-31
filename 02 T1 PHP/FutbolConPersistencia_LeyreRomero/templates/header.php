@@ -6,7 +6,6 @@ $url_equipos = $urlApp . 'app/equipos.php';
 $partidosPath = $urlApp . 'app/partidos.php';
 require_once __DIR__ . '/../utils/SessionHelper.php';
 
-// INICIAR SESIÓN CON TU SessionHelper
 SessionHelper::startSessionIfNotStarted();
 ?>
 <!DOCTYPE html>

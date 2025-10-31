@@ -1,16 +1,14 @@
 <?php
 require_once '../templates/header.php';
-
-// incluye DAO y modelo
 require_once '../persistence/DAO/EquipoDAO.php';
 require_once '../models/Equipo.php';
 
-// instancia del DAO
+// Instancia del DAO y variables para mensajes
 $dao = new EquipoDAO();
 $error = '';
 $success = '';
 
-// insertar equipo si llega POST
+// Procesar formulario (insertar equipo)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $nombre = trim($_POST['nombre'] ?? '');
   $estadio = trim($_POST['estadio'] ?? '');
@@ -20,25 +18,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   } else {
     $ok = $dao->insert($nombre, $estadio);
     if ($ok === false) {
-      // Este mensaje de error solo se mostrará si hay un problema de base de datos
       $error = "No se pudo insertar el equipo (error en BD).";
     } else {
       $success = "¡Equipo '{$nombre}' registrado con éxito!";
-      // Redirección para evitar reenvío del formulario (Post/Redirect/Get pattern)
+      // Evita el reenvío del formulario (Post/Redirect/Get)
       header("Location: equipos.php");
       exit;
     }
   }
 }
 
-// obtener todos los equipos (devuelve array de objetos Equipo)
+// Obtener todos los equipos (array de objetos Equipo)
 $equipos = $dao->selectAll();
 ?>
 
-<!-- Contenido principal con mejoras visuales -->
 <div class="container py-5">
-
-  <!-- TÍTULO PRINCIPAL CON ICONO -->
   <h1 class="text-center text-primary mb-5 fw-bolder">
     <i class="fa-solid fa-people-group width=40 height=40"></i>
     Equipos
@@ -53,7 +47,6 @@ $equipos = $dao->selectAll();
 
   <div class="table-responsive rounded-3 shadow-lg mb-4">
     <table class="table table-striped table-hover align-middle mb-0 text-center">
-      <!-- ENCABEZADO DE TABLA AZUL FUERTE -->
       <thead class="bg-primary fw-bold text-white">
         <tr>
           <th>Nombre</th>
@@ -71,7 +64,6 @@ $equipos = $dao->selectAll();
         <?php else: ?>
           <?php foreach ($equipos as $e): ?>
             <tr>
-              <!-- Contenido Centrado -->
               <td class="fw-semibold text-dark"><?= htmlspecialchars($e->getNombre()) ?></td>
               <td class="text-muted"><?= htmlspecialchars($e->getEstadio()) ?></td>
               <td class="text-center">
@@ -89,6 +81,7 @@ $equipos = $dao->selectAll();
       </tbody>
     </table>
   </div>
+
   <button class="btn btn-outline-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#addEquipoModal">
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill me-2" viewBox="0 0 16 16">
       <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
@@ -97,7 +90,7 @@ $equipos = $dao->selectAll();
   </button>
 </div>
 
-<!-- Modal para Añadir Equipo (Centrado y con estética consistente) -->
+<!-- Modal para añadir un nuevo equipo -->
 <div class="modal fade" id="addEquipoModal" tabindex="-1" aria-labelledby="addEquipoModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-md modal-dialog-centered">
     <div class="modal-content rounded-4 shadow-lg">
@@ -110,7 +103,7 @@ $equipos = $dao->selectAll();
         </h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <!-- Formulario simple de dos campos -->
+
       <form method="POST">
         <div class="modal-body">
           <div class="mb-3">

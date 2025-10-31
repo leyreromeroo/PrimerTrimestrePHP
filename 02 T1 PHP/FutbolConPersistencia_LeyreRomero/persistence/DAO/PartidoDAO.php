@@ -4,7 +4,7 @@ require_once '../models/Partido.php';
 
 class PartidoDAO extends GenericDAO {
     const TABLE = 'partidos';
-    const EQUIPO_TABLE = 'equipos'; // Asumo que la tabla de equipos se llama 'equipos'
+    const EQUIPO_TABLE = 'equipos'; 
 
     public function __construct() {
         parent::__construct();
@@ -12,7 +12,7 @@ class PartidoDAO extends GenericDAO {
 
     // --- Función de Carga de Objetos con Nombres ---
     // Esta función reutilizable simplifica la creación del objeto Partido
-    // y asigna los nombres de los equipos usando los nuevos setters del modelo.
+    // y asigna los nombres de los equipos usando los setters del modelo.
     private function createPartidoFromRow($row) {
         $partido = new Partido(
             $row['id_partido'],
@@ -24,7 +24,6 @@ class PartidoDAO extends GenericDAO {
         );
         
         // Asignar los nombres obtenidos por el JOIN a las nuevas propiedades del modelo
-        // Asumo que los alias en la consulta son 'nombre_local' y 'nombre_visitante'
         if (isset($row['nombre_local'])) {
             $partido->setNombreLocal($row['nombre_local']);
         }
@@ -47,7 +46,7 @@ class PartidoDAO extends GenericDAO {
     }
 
 
-    // ✅ Obtener todos los partidos
+    // Obtener todos los partidos
     public function selectAll() {
         $query = $this->getBaseQuery();
         $result = mysqli_query($this->conn, $query);
@@ -59,7 +58,7 @@ class PartidoDAO extends GenericDAO {
         return $partidos;
     }
 
-    // ✅ Buscar partido por ID
+    // Buscar partido por ID
     public function selectById($id) {
         $query = $this->getBaseQuery() . " WHERE p.id_partido = ?";
         $stmt = mysqli_prepare($this->conn, $query);
@@ -71,7 +70,7 @@ class PartidoDAO extends GenericDAO {
         return $row ? $this->createPartidoFromRow($row) : null;
     }
 
-    // ✅ Obtener partidos por jornada
+    // Obtener partidos por jornada
     public function selectByJornada($jornada) {
         $query = $this->getBaseQuery() . " WHERE p.jornada = ?";
         $stmt = mysqli_prepare($this->conn, $query);
@@ -86,7 +85,7 @@ class PartidoDAO extends GenericDAO {
         return $partidos;
     }
 
-    // ✅ Obtener partidos por equipo (MODIFICADO para usar el JOIN)
+    // Obtener partidos por equipo (MODIFICADO para usar el JOIN)
     public function selectByEquipo($idEquipo) {
         $query = $this->getBaseQuery() . " 
                   WHERE p.id_local = ? OR p.id_visitante = ?";
@@ -102,9 +101,7 @@ class PartidoDAO extends GenericDAO {
         return $partidos;
     }
 
-    // Métodos insert, update y delete (sin cambios, ya que solo afectan a la tabla 'partidos')
-
-    // ✅ Insertar nuevo partido
+    // Insertar nuevo partido
     public function insert($id_local, $id_visitante, $jornada, $resultado, $estadio) {
         // Evitar duplicados
         $check = "SELECT COUNT(*) AS total FROM " . self::TABLE . " WHERE id_local = ? AND id_visitante = ?";
@@ -122,7 +119,7 @@ class PartidoDAO extends GenericDAO {
         return mysqli_stmt_execute($stmt);
     }
 
-    // ✅ Actualizar partido
+    // Actualizar partido
     public function update($id, $id_local, $id_visitante, $jornada, $resultado, $estadio) {
         $query = "UPDATE " . self::TABLE . "
                   SET id_local = ?, id_visitante = ?, jornada = ?, resultado = ?, estadio = ?
@@ -132,7 +129,7 @@ class PartidoDAO extends GenericDAO {
         return mysqli_stmt_execute($stmt);
     }
 
-    // ✅ Eliminar partido
+    // Eliminar partido
     public function delete($id) {
         $query = "DELETE FROM " . self::TABLE . " WHERE id_partido = ?";
         $stmt = mysqli_prepare($this->conn, $query);
