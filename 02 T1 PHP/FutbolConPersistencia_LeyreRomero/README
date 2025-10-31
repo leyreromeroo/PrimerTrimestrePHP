@@ -1,18 +1,102 @@
-# ArteaV1 - Proyecto (DAO, PHP, MySQL)
+# FutbolConPersistencia (DAO, PHP, MySQL)
 
-## Requisitos
-- PHP 7.4+ con PDO MySQL
-- MySQL / MariaDB
-- Composer (opcional)
-- HeidiSQL para importar SQL
+![PHP](https://img.shields.io/badge/PHP-7.4%2B-blue) ![MySQL](https://img.shields.io/badge/MySQL-8.0-green) ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-## Instalación
-1. Importar `sql/laliga.sql` en tu servidor MySQL (HeidiSQL).
-2. Copiar `src/config.php` y configurar credenciales DB.
-3. Servir la carpeta `public/` (ej. con built-in php server):
-   php -S localhost:8000 -t public
-4. Accede a http://localhost:8000
+Este proyecto es un ejemplo de **aplicación web simple** construida con **PHP puro**, que utiliza el patrón **Data Access Object (DAO)** para interactuar con una base de datos **MySQL**.
 
-## Notas
-- Patrón DAO usado en src/dao.
-- Sesión: si visitas un equipo, la página principal se redirige a sus partidos (session -> last_viewed_team).
+---
+
+## Tabla de Contenidos
+
+- [Requisitos del Sistema](#requisitos-del-sistema)  
+- [Instalación y Configuración](#instalación-y-configuración)  
+  - [1. Preparación del Entorno Local](#1-preparación-del-entorno-local-xamppmamp)  
+  - [2. Configuración y Creación de la Base de Datos](#2-configuración-y-creación-de-la-base-de-datos)  
+  - [3. Configuración de Credenciales de la Aplicación](#3-configuración-de-credenciales-de-la-aplicación)  
+  - [4. Ejecución y Navegación](#4-ejecución-y-navegación)  
+- [Estructura y Tecnologías](#estructura-y-tecnologías)  
+- [Gestión de Sesión](#gestión-de-sesión)  
+- [Contribución](#contribución)  
+- [Licencia](#licencia)
+
+---
+
+## Requisitos del Sistema
+
+Para ejecutar esta aplicación en tu entorno local, necesitarás:
+
+- **Servidor Web Local**: XAMPP, WAMP, MAMP o servidor PHP integrado  
+- **PHP**: Versión 7.4 o superior (con la extensión `mysqli` habilitada)  
+- **Base de Datos**: MySQL o MariaDB  
+- **Herramienta de DB recomendada**: HeidiSQL o phpMyAdmin
+
+---
+
+## Instalación y Configuración
+
+### 1. Preparación del Entorno Local (XAMPP/MAMP)
+
+1. **Iniciar el servidor**: Abre el panel de control de XAMPP/MAMP e inicia **Apache** y **MySQL**.  
+2. **Ubicación del proyecto**:  
+   - **XAMPP**: Copia la carpeta del proyecto en `C:\xampp\htdocs\` (Linux/macOS: la ruta equivalente)  
+   - **MAMP**: Copia la carpeta en `/Applications/MAMP/htdocs/`  
+3. **Ruta de acceso**:  
+
+### 2. Configuración y Creación de la Base de Datos
+
+1. **Abrir la herramienta de DB**:  
+- **phpMyAdmin**: http://localhost/phpmyadmin/  
+- **HeidiSQL**: Host: `127.0.0.1`, Usuario: `root`, Contraseña vacía (por defecto en XAMPP)  
+2. **Importar la base de datos**:  
+- Crear la base de datos `LaLiga`  
+- Seleccionarla y cargar el archivo `sql/laliga.sql`  
+- Esto creará las tablas `equipos` y `partidos` y cargará los datos iniciales
+
+### 3. Configuración de Credenciales de la Aplicación
+
+1. Copia el archivo de configuración si existe:  
+src/config.php.dist -> src/config.php
+
+2. Edita `src/config.php` para ajustar las credenciales:
+```php
+define('DB_HOST', 'localhost');
+define('DB_USER', 'root');
+define('DB_PASS', ''); // Contraseña vacía por defecto en XAMPP
+define('DB_NAME', 'LaLiga'); // Nombre de la base de datos
+
+## 4. Ejecución y Navegación
+
+Si usas servidor PHP integrado, accede a la aplicación mediante:
+
+http://localhost:8000/
+
+
+---
+
+## Estructura y Tecnologías
+
+- **Front-end**: HTML, Bootstrap, CSS  
+- **Back-end**: PHP orientado a objetos (POO)  
+- **Persistencia**: MySQLi con patrón DAO  
+  - `src/persistence/DAO/`: Contiene los DAOs (`EquipoDAO.php`, `PartidoDAO.php`)  
+  - `src/model/`: Contiene las clases de modelo (`Equipo.php`, `Partido.php`)  
+
+---
+
+## Gestión de Sesión
+
+- Se utiliza la variable `$_SESSION['ultimo_equipo_id']`  
+- Si visitas la página de un equipo, la próxima vez que accedas a la raíz se te redirigirá automáticamente a los partidos de ese equipo
+
+---
+
+## Contribución
+
+# Haz un fork del repositorio
+git checkout -b feature/nueva-funcionalidad  # Crea tu rama
+git commit -m 'Agregar nueva funcionalidad'   # Haz commit de tus cambios
+git push origin feature/nueva-funcionalidad  # Push a la rama
+# Abre un Pull Request
+
+
+
